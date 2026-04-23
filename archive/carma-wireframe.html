@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carma サイト — ワイヤーフレーム</title>
+<style>
+  :root{
+    --ink:#111;--line:#333;--muted:#777;--bg:#f5f5f5;--box:#e3e3e3;--note:#fff8c8;
+    --accent:#d0d0d0;--radius:2px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    font-size:13px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wire{max-width:1200px;margin:40px auto;background:#fff;border:2px solid var(--ink);
+    box-shadow:8px 8px 0 rgba(0,0,0,.08)}
+  .wire-title{padding:14px 20px;border-bottom:2px solid var(--ink);
+    display:flex;justify-content:space-between;align-items:center;background:#fafafa}
+  .wire-title h1{margin:0;font-size:14px;letter-spacing:.1em}
+  .wire-title .meta{font-size:11px;color:var(--muted)}
+  .sec{border-bottom:2px dashed var(--line);padding:16px 20px;position:relative}
+  .sec::before{content:attr(data-label);position:absolute;top:8px;right:12px;
+    font-size:10px;letter-spacing:.15em;color:var(--muted);background:#fff;padding:2px 6px;
+    border:1px solid var(--muted)}
+  .row{display:flex;gap:12px}
+  .row.wrap{flex-wrap:wrap}
+  .box{border:1.5px dashed var(--line);background:var(--bg);padding:12px;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    color:var(--muted);min-height:40px;position:relative;font-size:12px}
+  .box.solid{background:var(--box);border-style:solid}
+  .box.img::after{content:"";position:absolute;inset:6px;
+    background:
+      linear-gradient(to top right,transparent 49.5%,var(--muted) 49.5% 50.5%,transparent 50.5%),
+      linear-gradient(to top left,transparent 49.5%,var(--muted) 49.5% 50.5%,transparent 50.5%);
+    opacity:.5;pointer-events:none}
+  .tag{display:inline-block;padding:2px 7px;border:1px solid var(--ink);font-size:10px;
+    letter-spacing:.1em;margin:0 4px 4px 0;background:#fff}
+  .tag.fill{background:var(--ink);color:#fff}
+  .note{background:var(--note);border:1px solid #d4c35a;padding:6px 10px;font-size:11px;
+    color:#5a4a00;margin-top:8px;border-radius:2px}
+  .grid{display:grid;gap:10px}
+  .g-2{grid-template-columns:1fr 1fr}
+  .g-3{grid-template-columns:repeat(3,1fr)}
+  .g-4{grid-template-columns:repeat(4,1fr)}
+  .g-6{grid-template-columns:repeat(6,1fr)}
+  .g-12{grid-template-columns:repeat(12,1fr)}
+  .span-8{grid-column:span 8}.span-4{grid-column:span 4}
+  .span-3{grid-column:span 3}.span-9{grid-column:span 9}
+  h2.sec-h{margin:0 0 10px;font-size:13px;border-left:4px solid var(--ink);padding-left:8px;
+    letter-spacing:.08em}
+  .stub{font-size:11px;color:var(--muted);font-style:italic}
+  .placeholder-text{background:linear-gradient(var(--accent) 0 0) no-repeat,
+    linear-gradient(var(--accent) 0 0) no-repeat,
+    linear-gradient(var(--accent) 0 0) no-repeat;
+    background-size:100% 6px,80% 6px,60% 6px;
+    background-position:0 6px,0 20px,0 34px;height:40px}
+  .nav-pills{display:flex;gap:2px;flex-wrap:wrap}
+  .nav-pills span{padding:6px 10px;border:1px solid var(--line);font-size:11px;background:#fff}
+  .cast-card{border:1.5px dashed var(--line);padding:8px;background:#fff}
+  .cast-card .ph{aspect-ratio:3/4;background:var(--box);margin-bottom:6px;position:relative}
+  .cast-card .ph::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to top right,transparent 49.5%,var(--muted) 49.5% 50.5%,transparent 50.5%),
+    linear-gradient(to top left,transparent 49.5%,var(--muted) 49.5% 50.5%,transparent 50.5%);opacity:.4}
+  .cast-card .nm{font-size:11px;font-weight:700}
+  .cast-card .tm{font-size:10px;color:var(--muted)}
+  .course-row{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--line);
+    background:#fff;margin-bottom:4px;font-size:12px}
+  .course-row .idx{width:24px;text-align:center;color:var(--muted);font-family:monospace}
+  .course-row .name{flex:1;font-weight:600}
+  .course-row .price{color:var(--muted);font-size:11px}
+  .btn{display:inline-block;padding:8px 14px;border:1.5px solid var(--ink);background:#fff;
+    font-size:11px;letter-spacing:.1em}
+  .btn.fill{background:var(--ink);color:#fff}
+  .side-menu{border:1px solid var(--line);background:#fff}
+  .side-menu .mi{padding:8px 10px;border-bottom:1px solid #eee;font-size:11px;
+    display:flex;justify-content:space-between}
+  .side-menu .mi:last-child{border-bottom:0}
+  .schedule-grid{display:grid;grid-template-columns:80px repeat(7,1fr);gap:2px;font-size:10px}
+  .schedule-grid .cell{background:#fff;border:1px solid #ddd;padding:4px;min-height:28px;text-align:center}
+  .schedule-grid .cell.h{background:var(--box);font-weight:700}
+  .footer-col h3{font-size:11px;margin:0 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px}
+  .footer-col ul{margin:0;padding:0;list-style:none;font-size:10px;color:var(--muted)}
+  .footer-col li{padding:2px 0;border-bottom:1px dotted #ddd}
+  .legend{font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;
+    padding:8px 20px;background:#fafafa;border-top:2px solid var(--ink)}
+  .legend span{display:flex;align-items:center;gap:4px}
+  .swatch{display:inline-block;width:14px;height:14px;border:1px dashed var(--line);background:var(--bg)}
+  .swatch.solid{background:var(--box);border-style:solid}
+  .swatch.note{background:var(--note);border-color:#d4c35a}
+  @media(max-width:800px){
+    .wire{margin:10px;box-shadow:none}
+    .g-4,.g-3,.g-6,.g-12{grid-template-columns:1fr 1fr}
+    .span-8,.span-4,.span-3,.span-9{grid-column:span 2}
+  }
+</style>
+</head>
+<body>
+
+<div class="wire">
+
+  <!-- タイトルバー -->
+  <div class="wire-title">
+    <h1>WIREFRAME — Private SM Club Carma / リニューアル構成案</h1>
+    <div class="meta">v0.1 · 参照: carma.jp/top.php · グレースケール / 構造のみ</div>
+  </div>
+
+  <!-- 1. アナウンス/年齢認証帯 -->
+  <section class="sec" data-label="SECTION 00 / GATE">
+    <div class="box solid">【年齢認証モーダル】 18歳以上のみ閲覧可 · [はい]ボタン · [いいえ]ボタン (localStorageで永続化)</div>
+    <div class="note">※初回訪問時のみ表示。認証後はヘッダー直下に細い注意帯「当サイトはアダルト情報を含みます」を残す。</div>
+  </section>
+
+  <!-- 2. ヘッダー -->
+  <section class="sec" data-label="SECTION 01 / HEADER">
+    <div class="grid g-12" style="align-items:center">
+      <div class="span-3 box img" style="min-height:60px">LOGO<br>Carma1 since 2001</div>
+      <div class="span-6">
+        <div class="nav-pills">
+          <span>TOP</span><span>料金システム</span><span>在籍表</span>
+          <span>出勤表</span><span>ニュース</span><span>イベント</span>
+          <span>ギャラリー</span><span>アクセス</span>
+        </div>
+        <div class="stub" style="margin-top:6px">※グローバルナビ / PC横並び / SPはハンバーガー</div>
+      </div>
+      <div class="span-3" style="text-align:right">
+        <div class="tag fill">☎ 06-4709-6767</div><br>
+        <span class="tag">お問い合わせ</span>
+        <span class="tag">メルマガ</span>
+        <span class="tag">会員ページ</span>
+      </div>
+    </div>
+    <div class="note">スクロール時は固定ヘッダー（高さ圧縮 + すりガラス背景）に切替</div>
+  </section>
+
+  <!-- 3. ヒーロー -->
+  <section class="sec" data-label="SECTION 02 / HERO">
+    <div class="grid g-12">
+      <div class="span-8 box img" style="min-height:320px">
+        メインビジュアル（スライダー：5秒送り / 3〜5枚）<br>
+        <span class="stub">bxSlider相当 → 現代版はSwiper / Keen-slider</span>
+      </div>
+      <div class="span-4" style="display:flex;flex-direction:column;gap:10px">
+        <div class="box solid" style="min-height:80px">キャッチコピー<br>「大阪・梅田 / 25年の信頼」</div>
+        <div class="box" style="min-height:60px">営業時間 10:00〜23:00 / 年中無休</div>
+        <div class="btn fill" style="text-align:center">ご予約はこちら →</div>
+        <div class="btn" style="text-align:center">初めての方へ（診断）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 本日の出勤 -->
+  <section class="sec" data-label="SECTION 03 / TODAY'S CAST">
+    <h2 class="sec-h">本日の出勤キャスト</h2>
+    <div class="grid g-6">
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">12:00 - 21:00</div></div>
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">12:00 - 23:00</div></div>
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">15:00 - 23:00</div></div>
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">20:00 - 23:00</div></div>
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">12:00 - 18:00</div></div>
+      <div class="cast-card"><div class="ph"></div><div class="nm">キャスト名</div><div class="tm">10:00 - 23:00</div></div>
+    </div>
+    <div class="stub" style="margin-top:8px">→ カードクリックで c_prof.php?c_id=* 相当のプロフィール詳細へ</div>
+  </section>
+
+  <!-- 5. 週間スケジュール -->
+  <section class="sec" data-label="SECTION 04 / WEEKLY SCHEDULE">
+    <h2 class="sec-h">出勤スケジュール（週間）</h2>
+    <div class="schedule-grid">
+      <div class="cell h">キャスト</div>
+      <div class="cell h">月</div><div class="cell h">火</div><div class="cell h">水</div>
+      <div class="cell h">木</div><div class="cell h">金</div><div class="cell h">土</div><div class="cell h">日</div>
+      <div class="cell h">キャストA</div>
+      <div class="cell">12-21</div><div class="cell">—</div><div class="cell">15-23</div>
+      <div class="cell">12-21</div><div class="cell">10-23</div><div class="cell">10-23</div><div class="cell">—</div>
+      <div class="cell h">キャストB</div>
+      <div class="cell">—</div><div class="cell">12-18</div><div class="cell">12-18</div>
+      <div class="cell">—</div><div class="cell">20-23</div><div class="cell">12-23</div><div class="cell">15-23</div>
+      <div class="cell h">キャストC</div>
+      <div class="cell">10-23</div><div class="cell">10-23</div><div class="cell">—</div>
+      <div class="cell">15-23</div><div class="cell">—</div><div class="cell">12-21</div><div class="cell">10-23</div>
+    </div>
+    <div class="note">CMS/GASで動的生成 → SM.Carma の既存管理シートと連携可能</div>
+  </section>
+
+  <!-- 6. コース一覧 -->
+  <section class="sec" data-label="SECTION 05 / COURSES">
+    <h2 class="sec-h">コースメニュー（全11種）</h2>
+    <div class="grid g-2">
+      <div>
+        <div class="course-row"><div class="idx">01</div><div class="name">自由恋愛コース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">02</div><div class="name">超自由恋愛コース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">03</div><div class="name">Sコース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">04</div><div class="name">Mコース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">05</div><div class="name">MIXコース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">06</div><div class="name">エロ格闘コース</div><div class="price">¥—</div></div>
+      </div>
+      <div>
+        <div class="course-row"><div class="idx">07</div><div class="name">超エロ格闘コース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">08</div><div class="name">新人研修コース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">09</div><div class="name">CatFight コース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">10</div><div class="name">アスリートコース</div><div class="price">¥—</div></div>
+        <div class="course-row"><div class="idx">11</div><div class="name">野外コース</div><div class="price">¥—</div></div>
+        <div class="course-row" style="background:#eee;color:var(--muted)"><div class="idx">—</div><div class="name">（非表示：格闘/M格闘）</div><div class="price">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 2カラム本文：ご挨拶＋サイドメニュー -->
+  <section class="sec" data-label="SECTION 06 / ABOUT + SIDEBAR">
+    <div class="grid g-12">
+      <div class="span-9">
+        <h2 class="sec-h">ご挨拶 / About Carma</h2>
+        <div class="placeholder-text"></div>
+        <div class="placeholder-text" style="margin-top:8px"></div>
+        <div class="placeholder-text" style="margin-top:8px"></div>
+        <div class="row" style="margin-top:12px">
+          <div class="box img" style="flex:1;min-height:120px">店内写真 1</div>
+          <div class="box img" style="flex:1;min-height:120px">店内写真 2</div>
+          <div class="box img" style="flex:1;min-height:120px">店内写真 3</div>
+        </div>
+      </div>
+      <div class="span-3">
+        <h2 class="sec-h">メニュー</h2>
+        <div class="side-menu">
+          <div class="mi">SM.カルマ クイック診断 <span>→</span></div>
+          <div class="mi">ご挨拶 <span>→</span></div>
+          <div class="mi">メディア掲載物 <span>→</span></div>
+          <div class="mi">ブログ (livedoor) <span>↗</span></div>
+          <div class="mi">グラビア (purelovers) <span>↗</span></div>
+          <div class="mi">ムービー <span>→</span></div>
+          <div class="mi">プレイイメージ <span>→</span></div>
+          <div class="mi">カルマチューブ <span>→</span></div>
+          <div class="mi">コスチューム <span>→</span></div>
+          <div class="mi">求人情報 <span>→</span></div>
+          <div class="mi">お客様の声 <span>→</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. ギャラリー -->
+  <section class="sec" data-label="SECTION 07 / GALLERY">
+    <h2 class="sec-h">ギャラリー / プレイイメージ</h2>
+    <div class="grid g-12" style="grid-auto-rows:90px">
+      <div class="box img" style="grid-column:span 4;grid-row:span 2">大判 1</div>
+      <div class="box img" style="grid-column:span 4">横 2</div>
+      <div class="box img" style="grid-column:span 2">正方 3</div>
+      <div class="box img" style="grid-column:span 2">正方 4</div>
+      <div class="box img" style="grid-column:span 2">正方 5</div>
+      <div class="box img" style="grid-column:span 3">横 6</div>
+      <div class="box img" style="grid-column:span 3">横 7</div>
+    </div>
+  </section>
+
+  <!-- 9. News / Event -->
+  <section class="sec" data-label="SECTION 08 / NEWS & EVENT">
+    <div class="grid g-2">
+      <div>
+        <h2 class="sec-h">NEWS / お知らせ</h2>
+        <div class="course-row"><div class="idx">NEW</div><div class="name">タイトル（最新記事）</div><div class="price">2026.04.20</div></div>
+        <div class="course-row"><div class="idx">—</div><div class="name">タイトル</div><div class="price">2026.04.15</div></div>
+        <div class="course-row"><div class="idx">—</div><div class="name">タイトル</div><div class="price">2026.04.10</div></div>
+        <div class="course-row"><div class="idx">—</div><div class="name">タイトル</div><div class="price">2026.04.01</div></div>
+      </div>
+      <div>
+        <h2 class="sec-h">EVENT / イベント情報</h2>
+        <div class="box img" style="min-height:100px">イベントバナー</div>
+        <div class="placeholder-text" style="margin-top:8px"></div>
+        <div style="margin-top:8px"><span class="btn">一覧を見る →</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. メディア掲載 / お客様の声 -->
+  <section class="sec" data-label="SECTION 09 / MEDIA & VOICE">
+    <div class="grid g-2">
+      <div>
+        <h2 class="sec-h">メディア掲載</h2>
+        <div class="row wrap">
+          <div class="box img" style="width:120px;height:80px">雑誌 1</div>
+          <div class="box img" style="width:120px;height:80px">雑誌 2</div>
+          <div class="box img" style="width:120px;height:80px">TV</div>
+          <div class="box img" style="width:120px;height:80px">Web</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="sec-h">お客様の声</h2>
+        <div class="box solid" style="min-height:60px;text-align:left;justify-content:flex-start;padding:10px">
+          "◯◯◯◯◯◯◯◯◯◯◯◯◯..." — 40代 男性</div>
+        <div class="box solid" style="min-height:60px;text-align:left;justify-content:flex-start;padding:10px;margin-top:6px">
+          "◯◯◯◯◯◯◯◯◯◯◯◯◯..." — 30代 男性</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. アクセス -->
+  <section class="sec" data-label="SECTION 10 / ACCESS">
+    <h2 class="sec-h">ACCESS / 店舗情報</h2>
+    <div class="grid g-12">
+      <div class="span-8 box img" style="min-height:240px">Google Maps 埋め込み（梅田エリア）</div>
+      <div class="span-4">
+        <div class="side-menu">
+          <div class="mi"><b>店名</b><span>Private SM Club Carma</span></div>
+          <div class="mi"><b>電話</b><span>06-4709-6767</span></div>
+          <div class="mi"><b>営業</b><span>10:00〜23:00</span></div>
+          <div class="mi"><b>住所</b><span>大阪・梅田</span></div>
+          <div class="mi"><b>支払い</b><span>現金 / カード</span></div>
+          <div class="mi"><b>X</b><span>@smcarma2001</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. CTA -->
+  <section class="sec" data-label="SECTION 11 / CTA">
+    <div class="box solid" style="min-height:100px;flex-direction:column;padding:20px">
+      <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px">ご予約・お問い合わせ</div>
+      <div class="row">
+        <span class="btn fill">☎ 電話予約 06-4709-6767</span>
+        <span class="btn">Web予約フォーム</span>
+        <span class="btn">メルマガ登録</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. フッター -->
+  <section class="sec" data-label="SECTION 12 / FOOTER">
+    <div class="grid g-4">
+      <div class="footer-col">
+        <h3>店舗情報</h3>
+        <ul><li>TOP</li><li>ご挨拶</li><li>料金システム</li><li>アクセス</li><li>求人情報</li></ul>
+      </div>
+      <div class="footer-col">
+        <h3>キャスト</h3>
+        <ul><li>在籍表</li><li>出勤表</li><li>グラビア</li><li>ムービー</li><li>プレイイメージ</li></ul>
+      </div>
+      <div class="footer-col">
+        <h3>コンテンツ</h3>
+        <ul><li>ニュース</li><li>イベント</li><li>ブログ</li><li>メディア掲載</li><li>カルマチューブ</li><li>コスチューム</li></ul>
+      </div>
+      <div class="footer-col">
+        <h3>規約 / 会員</h3>
+        <ul><li>会員ページ</li><li>メルマガ登録</li><li>お問い合わせ</li><li>利用規約</li><li>個人情報保護方針</li><li>リンク</li></ul>
+      </div>
+    </div>
+    <div class="stub" style="margin-top:16px;text-align:center">
+      © 2001–2026 Private SM Club Carma. All Rights Reserved.
+    </div>
+  </section>
+
+  <!-- フローティング -->
+  <section class="sec" data-label="FLOATING / FIXED UI">
+    <div class="row wrap">
+      <div class="box" style="min-width:140px">☎ 電話ボタン（右下固定）</div>
+      <div class="box" style="min-width:140px">📝 予約ボタン（右下固定）</div>
+      <div class="box" style="min-width:140px">▲ トップへ戻る</div>
+      <div class="box" style="min-width:180px">年齢認証モーダル（初回のみ）</div>
+    </div>
+  </section>
+
+  <!-- 凡例 -->
+  <div class="legend">
+    <span><i class="swatch"></i>プレースホルダ（テキスト/未定）</span>
+    <span><i class="swatch solid"></i>実コンテンツ領域</span>
+    <span><i class="swatch note"></i>設計メモ</span>
+    <span>点線 = 画像/メディア領域　· 　実線 = テキスト/ナビ領域</span>
+  </div>
+
+</div>
+
+</body>
+</html>
