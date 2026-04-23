@@ -1,8 +1,0 @@
-node_modules/
-.claude/
-.cache/
-*.log
-*.tmp
-.DS_Store
-venv/
-workspace/
